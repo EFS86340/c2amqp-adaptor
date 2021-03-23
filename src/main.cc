@@ -22,13 +22,7 @@
 
 int main() {
 
-	Pistache::Address addr(Pistache::Ipv4::any(), Pistache::Port(7071));
-	auto opts = Pistache::Http::Endpoint::options().threads(1);
-	Pistache::Http::Endpoint server(addr);
-	Pistache::Rest::Router router = makeAdaptorHandler();
-	server.init(opts);
-	server.setHandler(router.handler());
-
-	server.serve();
+	Adaptor adp;
+	adp.init_and_serve();
 
 }

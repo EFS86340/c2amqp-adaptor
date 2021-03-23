@@ -20,9 +20,26 @@
 #ifndef C2AMQP_ADAPTOR_H_
 #define C2AMQP_ADAPTOR_H_
 
+#include "qpid_proton.h"
+
+#include <memory>
 #include <pistache/endpoint.h>
 #include <pistache/router.h>
 
 Pistache::Rest::Router makeAdaptorHandler(void);
+
+class Adaptor {
+	private:
+	threadsafe_queue<std::string> queue_;
+
+	std::shared_ptr<Pistache::Http::Endpoint> server_ = nullptr;
+	std::shared_ptr<AdptProton> proton_ = nullptr;
+
+	public:
+	Adaptor() = default;
+
+	void init_and_serve();
+
+};
 
 #endif
