@@ -38,7 +38,7 @@ class AdptProton : public proton::messaging_handler {
 	std::string conn_url_;
 	std::string addr_;
 	proton::sender sender_;
-	proton::receiver receiver_;
+	// proton::receiver receiver_;
 
 	Msg_queue& msg_queue_;
 
@@ -52,7 +52,9 @@ class AdptProton : public proton::messaging_handler {
 
 	void on_sendable(proton::sender& s) override;
 
-	void on_message(proton::delivery &d, proton::message &response) override;
+	void on_tracker_accept(proton::tracker& t) override;
+
+	// void on_message(proton::delivery &d, proton::message &response) override;
 
 };
 

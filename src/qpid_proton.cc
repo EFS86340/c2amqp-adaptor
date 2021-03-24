@@ -21,27 +21,33 @@
 #include <proton/message.hpp>
 
 #include <iostream>
+#include <proton/tracker.hpp>
 
 void AdptProton::on_container_start(proton::container& c) {
-	c.connect(conn_url_);
+	sender_ = c.open_sender(addr_);
 }
 
 void AdptProton::on_connection_open(proton::connection& c) {
-	c.open_receiver(addr_);
-	c.open_sender(addr_);
+	// c.open_receiver(addr_);
 }
 
 void AdptProton::on_sendable(proton::sender& s) {
 	std::string msg;
-	if(msg_queue_.try_pop(msg)) {
+	std::cout << "[proton try to send]" << std::endl;
+	// for(;;) {
+		msg_queue_.wait_and_pop(msg);
 		std::cout << "[proton ready to send]" << std::endl;
 		proton::message req(msg);
 		s.send(req);
-		s.close();
-	}
+	 // }
+	// s.close();
 }
 
-void AdptProton::on_message(proton::delivery& d, proton::message& m) {
-	std::cout << "[proton receiver]: " << m.body() << std::endl;
-	d.connection().close();
+void AdptProton::on_tracker_accept(proton::tracker& t) {
+	std::cout << "[proton tracker accepted.]\n";
 }
+
+// void AdptProton::on_message(proton::delivery& d, proton::message& m) {
+// 	std::cout << "[proton receiver]: " << m.body() << std::endl;
+// 	d.connection().close();
+// }
