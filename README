@@ -1,0 +1,11 @@
+c2amqp-adapter
+---
+
+The adapter that receives Ceph s3-compatible HTTP notifications and converts to
+AMQP1.0.
+
+Dependencies:
+
+- Pistache, the http frontend
+- Qpid-proton-cpp, the amqp1.0 library
+
