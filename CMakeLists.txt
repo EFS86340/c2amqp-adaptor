@@ -4,6 +4,7 @@ project(c2amqp-adaptor VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 
+include_directories(include)
 add_subdirectory(src)
 
 include_directories(${PROJECT_SOURCE_DIR}/third_party)
