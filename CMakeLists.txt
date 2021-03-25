@@ -9,6 +9,6 @@ add_subdirectory(src)
 
 include_directories(${PROJECT_SOURCE_DIR}/third_party)
 
-# add_subdirectory("third_party/pistache")
+add_subdirectory("third_party/qpid-proton-cpp")
 
-# add_subdirectory("third_party/rapidjson")
+add_subdirectory("third_party/pistache")
