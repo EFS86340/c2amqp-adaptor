@@ -9,3 +9,19 @@ Dependencies:
 - Pistache, the http frontend
 - Qpid-proton-cpp, the amqp1.0 library
 
+Usage:
+- install the pistache and qpid-proton library mannually
+- `mkdir build && cd build && cmake .. && make`
+- you can use run the `demo_run.sh` to quickly set up the demo, or
+- `cd src`, run the broker, adapter, and simple_recv one by one, each
+	should be run in individual terminal( this step can be replaced by the
+	demo_run.sh )
+- you can use ` curl -d '{"key1":"value1", "key2":"value2"}' -H "Content-Type:
+	application/json" -X POST http://localhost:7074` to receive the Post-data in
+	simple_recv
+
+Todo:
+- Fix the cmake configuration to enable in-project compilation of pistache and
+	proton library
+- Error handling 
+- Endpoint configuration for more alterable feature
