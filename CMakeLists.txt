@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(include)
 add_subdirectory(src)
 
-add_subdirectory("third_party")
+# add_subdirectory("third_party")
 
-set(pistache_DIR
-		${CMAKE_SOURCE_DIR}/third_party/pistache/src/PistacheConfig.cmake.in)
-find_package(pistache)
-set(proton_DIR
-		${CMAKE_SOURCE_DIR}/third_party/qpid_proton/cpp/ProtonCppConfig.cmake.in)
-find_package(proton)
+# set(pistache_DIR
+# 		${CMAKE_SOURCE_DIR}/third_party/pistache/src/PistacheConfig.cmake.in)
+# find_package(pistache)
+# set(proton_DIR
+# 		${CMAKE_SOURCE_DIR}/third_party/qpid_proton/cpp/ProtonCppConfig.cmake.in)
+# find_package(proton)

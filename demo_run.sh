@@ -4,9 +4,9 @@
 DEMO_DIR='./src/'
 
 cd ${DEMO_DIR}
-BROKER_BIN='echo ./broker'
-RECEIVER_BIN='echo ./simple_recv'
-ADAPTER_BIN='echo ./ceph-amqp1.0-adaptor'
+BROKER_BIN='./demo_broker'
+RECEIVER_BIN='./demo_simple_recv'
+ADAPTER_BIN='./ceph-amqp1.0-adaptor'
 
 tmux new-session -d -s demo
 tmux split-window -h
