@@ -9,11 +9,11 @@ set(QPID_EXAMPLE_HEADER ${ADAPTER_INCLUDE}/options.hpp)
 
 set(ADAPTER ceph-amqp1.0-adaptor)
 
-set(pistache_DIR
-		${CMAKE_SOURCE_DIR}/third_party/pistache/src/PistacheConfig.cmake.in)
+# set(pistache_DIR
+# 		${CMAKE_SOURCE_DIR}/third_party/pistache/src/PistacheConfig.cmake.in)
 find_package(pistache)
-set(proton_DIR
-		${CMAKE_SOURCE_DIR}/third_party/qpid_proton/cpp/ProtonCppConfig.cmake.in)
+# set(proton_DIR
+# 		${CMAKE_SOURCE_DIR}/third_party/qpid_proton/cpp/ProtonCppConfig.cmake.in)
 find_package(proton)
 
 add_executable(${ADAPTER} ${ADAPTER_HEADER} ${ADAPTER_SRC})

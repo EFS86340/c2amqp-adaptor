@@ -1,7 +1,7 @@
 #!/bin/bash
 # script to run the demo
 
-DEMO_DIR='./src/'
+DEMO_DIR='/c2amqp/build/src/'
 
 cd ${DEMO_DIR}
 BROKER_BIN='./demo_broker'

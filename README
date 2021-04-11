@@ -6,10 +6,12 @@ AMQP1.0.
 
 Dependencies:
 
-- Pistache, the http frontend
-- Qpid-proton-cpp, the amqp1.0 library
+- Pistache, the http frontend, installed from ppa
+- Qpid-proton-cpp, the amqp1.0 library, installed from official packages
 
-Usage:
+The git submodules now are deprecated.
+
+Usage:[this is deprecated, please follow the Dockerfile approach]
 - install the pistache and qpid-proton library mannually
 - clone this repo and use `git submodule update --init --recursive`
 - `mkdir build && cd build && cmake .. && make`
@@ -24,12 +26,9 @@ Usage:
 [Suggested method]:
 Or you can set up this demo using the provided Dockerfile:
 1. clone this repo
-2. `git submodule update --init --recursive`
-3. `docker build -t demo-adapter .`
-4. docker run demo-adapter
+2. `docker build -t demo-adapter .`
+3. docker run demo-adapter
 
 Todo:
-- Fix the cmake configuration to enable in-project compilation of pistache and
-	proton library
 - Error handling 
 - Endpoint configuration for more alterable feature
