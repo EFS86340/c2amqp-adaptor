@@ -18,10 +18,10 @@
 #include "adaptor.h"
 #include <memory>
 #include <thread>
+#include "spdlog/spdlog.h"
 #include <pistache/endpoint.h>
 #include <pistache/http.h>
 
-#include <iostream>
 #include <pistache/http_defs.h>
 #include <pistache/net.h>
 #include <pistache/router.h>
@@ -37,7 +37,7 @@ class BucketNotificationHandler : public Pistache::Http::Handler {
 
 	void onRequest(const Pistache::Http::Request &requst,
 			Pistache::Http::ResponseWriter response) override {
-				std::cout << "[http server got: ]" << requst.body() << std::endl;
+				spdlog::info("Pistache HTTP handler get {}", requst.body());
 
 				msg_queue_.push(requst.body());
 				response.send(Pistache::Http::Code::Ok, "hi, ceph!\n");

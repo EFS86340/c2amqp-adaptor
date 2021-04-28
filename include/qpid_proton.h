@@ -20,6 +20,7 @@
 #define C2AMQP_QPID_PROTON_H_
 
 #include "ts_queue.h"
+#include "spdlog/spdlog.h"
 
 #include <condition_variable>
 #include <iostream>
@@ -34,14 +35,13 @@
 #include <proton/source_options.hpp>
 #include <proton/tracker.hpp>
 
+#include <sstream>
 #include <string>
 #include <mutex>
 #include <thread>
 #include <vector>
 #include <unordered_map>
 
-static std::mutex PRINT_LOCK;
-#define PRINT(x) do { std::lock_guard<std::mutex> l(PRINT_LOCK); x; } while(false)
 
 static const int PROTON_STATUS_NO_SUCH_CONNECTION = 1;
 static const int PROTON_STATUS_TIMEOUT = 2;
@@ -53,6 +53,7 @@ class Connection : public proton::messaging_handler {
 				std::string& addr) : conn_url_(url), addr_(addr), work_queue_(0) {
 			cont.open_sender(addr, proton::connection_options().handler(*this));
 			std::cout << "[debug] Connection ctor open sender done." << std::endl;
+			spdlog::debug("Connection ctor open sender done.");
 		};
 
 	private:
@@ -77,7 +78,7 @@ class Connection : public proton::messaging_handler {
 				while(!work_queue_) sender_ready_.wait(lk);
 				++queued_;
 			}
-			std::cout << "[info] connection ready to send" << std::endl;
+			spdlog::info("connection ready to send");
 			work_queue_->add([=](){ this->do_send(m); });
 		}
 
@@ -98,7 +99,7 @@ class Connection : public proton::messaging_handler {
 			std::lock_guard<std::mutex> lk(lock_);
 			sender_ = s;
 			work_queue_ = &s.work_queue();
-			std::cout << "[info] sender open now" << std::endl;
+			spdlog::info("sender open now");
 		}
 
 		void on_sendable(proton::sender& s) override {
@@ -134,15 +135,16 @@ class AdptProtonManager {
 		auto container_thread = std::thread([&]() { container_.run(); });
 		std::string msg;
 		for(;;) {
+			spdlog::info("Wait for new notification...");
 			msg_queue_.wait_and_pop(msg);
 			// parse and publish, here we publish directly TODO
-			std::cout << "[info] mgr get msg  " << msg << std::endl;
+			spdlog::info("AdptProtonManager get message {}", msg);
 			publish("127.0.0.1:5672127.0.0.1:5672/examples", msg);
 		}
 	}
 
 	void new_connection(const std::string& url, const std::string& addr) {
-		std::cout << "[new conn] " << "url: " << url << ", addr: " << addr << std::endl;
+		spdlog::info("New Connection: {} {}", url, addr);
 		const std::string conn_key(url + addr);
 		connections_[conn_key] = std::make_shared<Connection>(this->container_, url, addr);
 	}
@@ -150,22 +152,23 @@ class AdptProtonManager {
 	// returns status code, expose this interface for pistache http server
 	int publish(const std::string& destination, const std::string& msg) {
 		if(connections_.find(destination) == connections_.end()) {
-			std::cout << "[error] dest " << destination << " not found." << std::endl;
+			spdlog::error("Destination {} Not Found.", destination);
 			return 404;
 		}
 		auto conn = connections_[destination];
 		std::thread t([&]() { send_thread(*conn, msg); });
 		t.join();
-		std::cout << "[info] waiting for publish thead" << std::endl;
+		spdlog::info("Publish done, wait for send_thread to finish");
 		return 200;
 	}
 
 	private:
 	void send_thread(Connection& conn, const std::string& msg) {
-		auto id = std::this_thread::get_id();
+		std::stringstream id;
+		id << std::this_thread::get_id();
 		proton::message s(msg);
 		conn.send(s);
-		PRINT(std::cout << id << " send " << msg << std::endl);
+		spdlog::info("Thread of id {} send message {}.", id.str(), msg);
 	}
 
 	private:
