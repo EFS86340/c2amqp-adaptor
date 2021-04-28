@@ -3,7 +3,7 @@
 FROM ubuntu:20.04
 
 # dependencies for qpid-proton
-RUN apt-get update && apt-get install -y gcc g++ cmake
+RUN apt-get update && apt-get install -y gcc g++ cmake gdb
 
 RUN apt-get install -y tmux git ruby-dev doxygen vim curl \
 	libqpid-proton-cpp12-dev

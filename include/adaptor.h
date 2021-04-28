@@ -33,7 +33,7 @@ class Adaptor {
 	threadsafe_queue<std::string> queue_;
 
 	std::shared_ptr<Pistache::Http::Endpoint> server_ = nullptr;
-	std::shared_ptr<AdptProton> proton_ = nullptr;
+	std::shared_ptr<AdptProtonManager> proton_ = nullptr;
 
 	public:
 	Adaptor() = default;

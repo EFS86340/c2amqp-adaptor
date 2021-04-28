@@ -82,8 +82,10 @@ void Adaptor::init_and_serve() {
 
 	std::string proton_url("127.0.0.1:5672");
 	std::string proton_addr("127.0.0.1:5672/examples");
-	proton_ = std::make_shared<AdptProton>(proton_url, proton_addr, this->queue_);
-	proton::container(*proton_).run();
-
+	
+	proton_ = std::make_shared<AdptProtonManager>(this->queue_);
+	// proton::container(*proton_).run();
+	proton_->new_connection(proton_url, proton_addr);
+	proton_->init();
 }
 
