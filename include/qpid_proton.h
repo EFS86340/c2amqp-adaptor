@@ -114,6 +114,10 @@ class Connection : public proton::messaging_handler {
 			sender_ready_.notify_all();
 		}
 
+		void on_tracker_accept(proton::tracker& t) override {
+			spdlog::info("Proton get tracker info: accepted.");
+		}
+
 		void on_error(const proton::error_condition& e) override {
 			std::cerr << "error: " << e << std::endl;
 			exit(1);
@@ -139,13 +143,15 @@ class AdptProtonManager {
 			msg_queue_.wait_and_pop(msg);
 			// parse and publish, here we publish directly TODO
 			spdlog::info("AdptProtonManager get message {}", msg);
-			publish("127.0.0.1:5672127.0.0.1:5672/examples", msg);
+			auto target = connection_dispatcher(msg);
+			spdlog::info("Trying to publish to target {}.", target);
+			publish(target, msg);
 		}
 	}
 
 	void new_connection(const std::string& url, const std::string& addr) {
 		spdlog::info("New Connection: {} {}", url, addr);
-		const std::string conn_key(url + addr);
+		const std::string conn_key(addr);
 		connections_[conn_key] = std::make_shared<Connection>(this->container_, url, addr);
 	}
 
@@ -163,6 +169,22 @@ class AdptProtonManager {
 	}
 
 	private:
+
+	// we now use the msg body to determine which sender to send the msg
+	// TODO: json parser to full parse the notification
+	std::string connection_dispatcher(const std::string& msg) {
+		int count = 0;
+		std::stringstream ss;
+		for(auto c : msg) {
+			if(c == '"') {
+				count++;
+			} else if(count == 3) {
+				ss << c;
+			}
+		}
+		return ss.str();
+	}
+
 	void send_thread(Connection& conn, const std::string& msg) {
 		std::stringstream id;
 		id << std::this_thread::get_id();

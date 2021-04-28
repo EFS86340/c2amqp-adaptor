@@ -86,6 +86,7 @@ void Adaptor::init_and_serve() {
 	proton_ = std::make_shared<AdptProtonManager>(this->queue_);
 	// proton::container(*proton_).run();
 	proton_->new_connection(proton_url, proton_addr);
+	proton_->new_connection("127.0.0.1:5673", "127.0.0.1:5673/wangxu");
 	proton_->init();
 }
 
