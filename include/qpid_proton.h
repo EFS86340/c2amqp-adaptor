@@ -163,7 +163,7 @@ class AdptProtonManager {
 		}
 		auto conn = connections_[destination];
 		std::thread t([&]() { send_thread(*conn, msg); });
-		t.join();
+		// t.join();
 		spdlog::info("Publish done, wait for send_thread to finish");
 		return 200;
 	}

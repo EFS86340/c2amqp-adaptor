@@ -29,7 +29,9 @@ Or you can set up this demo using the provided Dockerfile:
 2. `docker build -t demo-adapter .`
 3. docker run demo-adapter
 
-or to better enter a dev environment, you can mount this folder in docker run command
+or to better enter a dev environment, you can mount this folder in docker run
+command below:
+`docker run --mount type=bind,source=$SRC_PATH,target=$PATH -it demo-adapter`
 
 [a simple workflow]
 [![adaptor.png](https://i.postimg.cc/QdH2xWRV/adaptor.png)](https://postimg.cc/mPWXmhZG)
