@@ -20,7 +20,8 @@
 #define C2AMQP_QPID_PROTON_H_
 
 #include "ts_queue.h"
-#include "spdlog/spdlog.h"
+#include "thread_pool.h"
+#include <spdlog/spdlog.h>
 
 #include <condition_variable>
 #include <iostream>
@@ -162,9 +163,10 @@ class AdptProtonManager {
 			return 404;
 		}
 		auto conn = connections_[destination];
-		std::thread t([&]() { send_thread(*conn, msg); });
+		// std::thread t([&]() { send_thread(*conn, msg); });
 		// t.join();
 		spdlog::info("Publish done, wait for send_thread to finish");
+		pool_.submit([=]() { send_thread(*conn, msg); });
 		return 200;
 	}
 
@@ -197,6 +199,8 @@ class AdptProtonManager {
 	proton::container container_;
 	Msg_queue& msg_queue_;
 	std::unordered_map<std::string, std::shared_ptr<Connection> > connections_;
+
+	thread_pool pool_;
 
 };
 

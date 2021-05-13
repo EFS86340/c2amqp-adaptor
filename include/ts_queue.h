@@ -16,6 +16,9 @@
  * =====================================================================================
  */
 
+#ifndef C2AMQP_THREADSAFE_QUEUE_H_
+#define C2AMQP_THREADSAFE_QUEUE_H_
+
 #include <memory>
 #include <thread>
 #include <mutex>
@@ -56,3 +59,5 @@ class threadsafe_queue {
 		data_cond.notify_one();
 	}
 };
+
+#endif
